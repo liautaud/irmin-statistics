@@ -1,24 +1,24 @@
-open Lwt.Infix
-
-let root =
-  "/home/craigfe/data/tezos/stores/new/full_store_BLAktkWruUqXNgHAiR7kLh4dMP96mGmQANDGagdHAsTXfqgvfiR_933914/context"
-
-let store_hash_hex =
-  "2ef3daa18c79b75446b8608885afde542404c63f9ca5f4029017898a48f6cb7d"
-
-let output = "/tmp/data"
-
 let ( let* ) = Lwt.bind
 
 let main () =
+  (* Parse command-line parameters. *)
+  if Array.length Sys.argv < 2 then (
+    Printf.eprintf "Usage: %s path_to_tezos_context [root_commit_hash]\n"
+      Sys.argv.(0);
+    Printf.eprintf
+      "If [root_commit_hash] is ommited, branches are used as heads.\n";
+    exit 1 );
+
+  (* Create a read-only Irmin store for the Tezos context. *)
+  let path = Sys.argv.(1) in
   let* repo =
-    Store.Repo.v (Irmin_pack.config ~readonly:true ~lru_size:0 root)
+    Store.Repo.v (Irmin_pack.config ~readonly:true ~lru_size:0 path)
   in
-  let hash = Store_hash.Hash.of_hex_string store_hash_hex in
-  let* tree = Store.Tree.of_hash repo hash >|= Option.get in
-  let* fd =
-    Lwt_unix.openfile output Lwt_unix.[ O_WRONLY; O_CREAT; O_TRUNC ] 0o666
+  let* heads =
+    if Array.length Sys.argv >= 3 then
+      Sys.argv.(2) |> Store_hash.Hash.of_hex_string |> Store.Commit.of_hash repo
+    else Lwt.return_none
   in
-  Tree_fold.dump tree fd
+  Statistics.dump ~heads repo
 
 let () = Lwt_main.run (main ())

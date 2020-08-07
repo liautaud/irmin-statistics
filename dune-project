@@ -1,23 +1,19 @@
 (lang dune 2.0)
-(name irmin-tree-serialisation)
+(name irmin-statistics)
 (implicit_transitive_deps false)
 
 (generate_opam_files true)
-(source (github CraigFe/irmin-tree-serialisation))
-(maintainers "Craig Ferguson <me@craigfe.io>")
-(authors "Craig Ferguson <me@craigfe.io>")
+(source (github liautaud/irmin-statistics))
+(maintainers "Romain Liautaud <romain@liautaud.fr>")
+(authors "Craig Ferguson <me@craigfe.io>" "Romain Liautaud <romain@liautaud.fr>")
 
 (package
- (name irmin-tree-serialisation)
+ (name irmin-statistics)
  (synopsis "")
- (description "\
-
-")
- (documentation https://CraigFe.github.io/irmin-tree-serialisation/)
+ (description "Computes Irmin storage statistics for a Tezos node.")
  (depends
   (ocaml (>= 4.8.0))
   (irmin (= 2.1.0))
   (tezos-crypto (= 7.1))
-  rusage
   fmt
   logs))

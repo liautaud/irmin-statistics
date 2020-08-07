@@ -1,3 +1,0 @@
-pin-depends: [
-  "rusage.dev" "git+http://github.com/CraigFe/ocaml-rusage"
-]
