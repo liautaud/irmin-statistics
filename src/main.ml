@@ -1,6 +1,8 @@
 let ( let* ) = Lwt.bind
 
 let main () =
+  Logs.set_level (Some Logs.Info);
+
   (* Parse command-line parameters. *)
   if Array.length Sys.argv < 2 then (
     Printf.eprintf "Usage: %s path_to_tezos_context [root_commit_hash]\n"

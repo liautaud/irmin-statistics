@@ -3,5 +3,5 @@
  (public_name irmin-tree-serialisation)
  (preprocess
   (pps ppx_irmin))
- (libraries digestif index irmin irmin-pack lwt lwt.unix tezos-crypto
+ (libraries logs digestif index irmin irmin-pack lwt lwt.unix tezos-crypto
    tezos-error-monad ocplib-endian fmt))

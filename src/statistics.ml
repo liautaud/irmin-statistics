@@ -61,6 +61,7 @@ let pred t =
   | _ -> Lwt.return []
 
 let traverse ~heads ~callback t =
+  Logs.info (fun m -> m "Started traversing the object graph.");
   (* Find the entry-points for the graph traversal. *)
   ( match heads with
   | None -> Store.Repo.heads t
@@ -132,9 +133,15 @@ let dump ~heads t =
     >|= fun () ->
     Utils.display_progress ~refresh_rate:(s.total_count, 1_000) (fun m ->
         m
-          "Statistics: %d objects found (%d branches, %d commits, %d nodes, %d \
+          "Running: %d objects found (%d branches, %d commits, %d nodes, %d \
            contents taking up %dKB)."
           s.total_count s.branch_count s.commit_count s.node_count
           s.contents_count s.contents_size)
   in
-  traverse ~heads ~callback t
+  traverse ~heads ~callback t >|= fun () ->
+  Logs.info (fun m ->
+      m
+        "Completed: %d objects found (%d branches, %d commits, %d nodes, %d \
+         contents taking up %dKB)."
+        s.total_count s.branch_count s.commit_count s.node_count
+        s.contents_count s.contents_size)
