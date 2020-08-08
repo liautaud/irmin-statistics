@@ -10,6 +10,8 @@ module Hash : sig
 
   val of_hex_string : string -> t
 
+  val of_string : string -> (t, [> `Msg of string ]) result
+
   val truncate : int -> t -> string
   (** Truncate a hash to [n]-many bytes of entropy. *)
 end = struct

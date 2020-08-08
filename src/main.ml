@@ -18,7 +18,8 @@ let main () =
   in
   let* heads =
     if Array.length Sys.argv >= 3 then
-      Sys.argv.(2) |> Store_hash.Hash.of_hex_string |> Store.Commit.of_hash repo
+      Sys.argv.(2) |> Store_hash.of_string |> Result.get_ok
+      |> Store.Commit.of_hash repo
     else Lwt.return_none
   in
   Statistics.dump ~heads repo
